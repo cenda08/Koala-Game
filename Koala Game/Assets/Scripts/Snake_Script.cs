@@ -1,43 +1,67 @@
+using System.Collections;
 using UnityEngine;
 public class Snake_Script : MonoBehaviour
 {
 
     public GameObject Snake;
     public float SnakeSpeed;
-    private float PreviousSnakeSpeed = 5f;
     public float TargetDown;
     public float TargetUp;
     public float TargetLeft;
     public float TargetRight;
+    //private bool SnakeIsMoving = false;
    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-    
+        StartCoroutine(SnakeSequence());
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //if (SnakeIsMoving == true) GameOver();
     }
 
-    void SnakeMovement()
+    IEnumerator SnakeSequence()
     {
-        transform.Translate(Vector3.down * SnakeSpeed * Time.deltaTime);
+        yield return new WaitForSeconds(5);
 
-        if (transform.position.y <= TargetDown) SnakeSpeed = 0;
-
-        RestoreSpeed();
-        transform.Translate(Vector3.right * SnakeSpeed * Time.deltaTime);
-        if (transform.position.x >= TargetRight) SnakeSpeed = 0;
-        RestoreSpeed();
+        StartCoroutine(SnakeMovement());
 
     }
 
-    public void RestoreSpeed()
+
+        IEnumerator SnakeMovement()
     {
-        SnakeSpeed = PreviousSnakeSpeed; 
+       // SnakeIsMoving = true; //pozdějc se použije pro game over když se klikne
+
+       while (transform.position.y >= TargetDown)
+        {
+            transform.Translate(Vector3.down * SnakeSpeed * Time.deltaTime);
+            Debug.Log ("pohyb dolů");
+            yield return null;
+
+        }
+
+
+        while (transform.position.x <= TargetRight)
+        {
+            transform.Translate(Vector3.right * SnakeSpeed * Time.deltaTime);
+            Debug.Log("pohyb doprava");
+            yield return null;
+        }
+
+        while (transform.position.y <= TargetUp)
+        {
+            transform.Translate(Vector3.up * SnakeSpeed * Time.deltaTime);
+            Debug.Log("pohybnahoru");
+            yield return null;
+        }
     }
+
+
+   
 }
+
