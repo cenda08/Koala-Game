@@ -298,8 +298,8 @@ Transform:
   m_GameObject: {fileID: 345024944}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.79, y: 6.06, z: 0.91}
-  m_LocalScale: {x: 1.9219549, y: 0.101667814, z: 1}
+  m_LocalPosition: {x: -5.73, y: 6.04, z: 0.91}
+  m_LocalScale: {x: 1.9219549, y: 0.08726454, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -317,11 +317,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   Snake: {fileID: 345024944}
-  SnakeSpeed: 1.4
+  SnakeSpeed: 2.08
   TargetDown: 3
-  TargetUp: 0
-  TargetLeft: 0
-  TargetRight: 2.99
+  TargetDown2: 2.63
+  TargetUp: 4.44
+  TargetUp2: 6.15
+  TargetLeft: -4.69
+  TargetRight: 1.45
+  TargetRight2: 2.29
 --- !u!1 &477229768
 GameObject:
   m_ObjectHideFlags: 0
