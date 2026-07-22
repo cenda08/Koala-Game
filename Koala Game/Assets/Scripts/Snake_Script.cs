@@ -4,7 +4,7 @@ public class Snake_Script : MonoBehaviour
 
     public GameObject Snake;
     public float SnakeSpeed;
-    private float PreviousSnakeSpeed;
+    private float PreviousSnakeSpeed = 5f;
     public float TargetDown;
     public float TargetUp;
     public float TargetLeft;
@@ -20,13 +20,15 @@ public class Snake_Script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SnakeMovement();
+        
     }
 
     void SnakeMovement()
     {
         transform.Translate(Vector3.down * SnakeSpeed * Time.deltaTime);
+
         if (transform.position.y <= TargetDown) SnakeSpeed = 0;
+
         RestoreSpeed();
         transform.Translate(Vector3.right * SnakeSpeed * Time.deltaTime);
         if (transform.position.x >= TargetRight) SnakeSpeed = 0;
