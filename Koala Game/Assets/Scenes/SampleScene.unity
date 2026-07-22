@@ -221,6 +221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 345024946}
   - component: {fileID: 345024945}
+  - component: {fileID: 345024947}
   m_Layer: 0
   m_Name: Snake
   m_TagString: Untagged
@@ -278,7 +279,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 0.49826476, g: 0.8238993, b: 0.22540632, a: 1}
+  m_Color: {r: 0.55176604, g: 0.72327036, b: 0.40712383, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -297,12 +298,30 @@ Transform:
   m_GameObject: {fileID: 345024944}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6845868, y: 0.6763853, z: -0.19098939, w: 0.19330527}
-  m_LocalPosition: {x: -3.18, y: 5.59, z: 7.33}
+  m_LocalPosition: {x: -3.87, y: 5.66, z: 0.93}
   m_LocalScale: {x: 0.15173239, y: 2.0667, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -179.639, y: -31.533997, z: 89.411}
+--- !u!114 &345024947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 345024944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8969122a63913d40a13e99c5a3af912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  Snake: {fileID: 345024944}
+  SnakeSpeed: 2
+  TargetDown: 3
+  TargetUp: 0
+  TargetLeft: 0
+  TargetRight: 2.99
 --- !u!1 &477229768
 GameObject:
   m_ObjectHideFlags: 0
