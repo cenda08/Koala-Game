@@ -12,19 +12,23 @@ public class Snake_Script : MonoBehaviour
     public float TargetLeft;
     public float TargetRight;
     public float TargetRight2;
+    public LogicScript logic;
+    private bool SnakeIsMoving = false;
     //private bool SnakeIsMoving = false;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         StartCoroutine(SnakeSequence());
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (SnakeIsMoving == true) GameOver();
+        if (SnakeIsMoving == true && (Input.anyKeyDown))
+            logic.GameOver();
     }
 
     IEnumerator SnakeSequence()
@@ -38,7 +42,7 @@ public class Snake_Script : MonoBehaviour
 
         IEnumerator SnakeMovement()
     {
-       // SnakeIsMoving = true; //pozdějc se použije pro game over když se klikne
+        SnakeIsMoving = true; //pozdějc se použije pro game over když se klikne
 
        while (transform.position.y >= TargetDown)
         {

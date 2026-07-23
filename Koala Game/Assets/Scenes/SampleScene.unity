@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 114468016}
   m_Layer: 0
   m_Name: Logistics
-  m_TagString: Untagged
+  m_TagString: Logic
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -499,6 +499,7 @@ MonoBehaviour:
   TargetLeft: -2.1
   TargetRight: 1.45
   TargetRight2: 2.29
+  logic: {fileID: 114468016}
 --- !u!1 &348646065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,6 +1160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1173090331}
   - component: {fileID: 1173090330}
+  - component: {fileID: 1173090332}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Untagged
@@ -1241,6 +1243,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
+--- !u!114 &1173090332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173090329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1556243d44e2fc94d87e0e2560f2fc3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BirdScript
+  Bird: {fileID: 1173090329}
+  BirdSpeed: 0
+  TargetRight: 0
 --- !u!1 &1396196552
 GameObject:
   m_ObjectHideFlags: 0
