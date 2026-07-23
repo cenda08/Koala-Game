@@ -78,16 +78,16 @@ public class Snake_Script : MonoBehaviour
             yield return null;
 
         }
-        while (transform.position.y >= TargetLeft)
+        while (transform.position.x >= TargetLeft)
         {
             transform.Translate(Vector3.left * SnakeSpeed * Time.deltaTime);
-            Debug.Log("pohyb dolů");
+            Debug.Log("pohyb doleva");
             yield return null;
 
         }
         while (transform.position.y <= TargetUp2)
         {
-            transform.Translate(Vector3.down * SnakeSpeed * Time.deltaTime);
+            transform.Translate(Vector3.up* SnakeSpeed * Time.deltaTime);
             Debug.Log("pohybnahoru");
             yield return null;
         }
