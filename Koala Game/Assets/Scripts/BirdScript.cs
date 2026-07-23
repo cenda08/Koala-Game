@@ -8,15 +8,16 @@ public class BirdScript : MonoBehaviour
     public float BirdSpeed;
     public float TargetRight;
     public LogicScript logic;
-    public SpriteRenderer SpriteRenderer;
-    public Sprite BirdSingsSprite;
-    public Sprite CalmBirdSprite;// dá se udělat změnou barvy, ale v budoucnu bude i změna sprite, takže rovnou
+    public SpriteRenderer spriteRenderer;
+   // public Sprite BirdSingsSprite;
+    //public Sprite CalmBirdSprite;// DO BUDOUCNA NA ZMĚNU SPRITU A ANIMACE
     private bool canClickBird = false;
     private bool BirdStopped = true;
     public float TargetLeft;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        spriteRenderer.color = Color.yellow;
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         StartCoroutine(BirdSequence());
     }
@@ -32,15 +33,6 @@ public class BirdScript : MonoBehaviour
         yield return new WaitForSeconds(15);
 
         StartCoroutine(BirdOn());
-
-        while (transform.position.x >= TargetLeft)
-        {
-            transform.Translate(Vector3.left * BirdSpeed * Time.deltaTime);
-            Debug.Log("pohyb doleva");
-            yield return null;
-
-        }
-
     }
 
     IEnumerator BirdOn()
@@ -68,18 +60,35 @@ IEnumerator BirdSingsSequence()
             float RandomPauseTime = Random.Range(5f, 10f);
             yield return new WaitForSeconds(RandomPauseTime);
         }
+
+        while (transform.position.x >= TargetLeft)
+        {
+            transform.Translate(Vector3.left * BirdSpeed * Time.deltaTime);
+            Debug.Log("pták odjizdi");
+            yield return null;
+
+        }
         yield return null;
     }
     
     IEnumerator BirdSings()
     {
         canClickBird = false;
+        spriteRenderer.color = Color.red;
         Debug.Log("BIRD SINGS START");
         float timer = 0;
+
+
+
+        yield return new WaitForSeconds(3);
+    
+
+        
+
         while (timer < 3)
         {
             BirdStopped = false;
-            SpriteRenderer.sprite = BirdSingsSprite;
+            timer += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 Debug.Log("ENTER");
@@ -88,18 +97,21 @@ IEnumerator BirdSingsSequence()
             }
            if (canClickBird == true && Input.GetMouseButtonDown(0))
             {
-                SpriteRenderer.sprite = CalmBirdSprite;
+              
                 BirdStopped = true;
+                spriteRenderer.color = Color.yellow;
             }
 
-            timer += Time.deltaTime;
             yield return null;
+            spriteRenderer.color = Color.yellow;
+            Debug.Log("KONEC BIRD SINGS");
+           
         }
+
         if (!BirdStopped)
         {
             logic.ScoreDecrease(5);
         }
-        yield return null;
     }
 
-}
+    }
