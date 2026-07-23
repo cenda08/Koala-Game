@@ -95,6 +95,8 @@ public class Snake_Script : MonoBehaviour
             Debug.Log("pohybnahoru");
             yield return null;
         }
+
+        SnakeIsMoving = false; 
     }
     }
 

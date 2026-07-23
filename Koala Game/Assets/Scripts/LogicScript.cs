@@ -6,15 +6,16 @@ using UnityEngine.SceneManagement;
 public class LogicScript : MonoBehaviour
 {
 
-    private int SleepScore = 100;
+    public int SleepScore;
     public Text SleepScoreText;
     public Text FinalSleepScoreText;
     public GameObject GameOverScreen;
+    public GameObject Hint;
 
     [ContextMenu ("Decrease Sleep Score")]
-    public void ScoreDecrease() {
+    public void ScoreDecrease(int amount) {
 
-        SleepScore -= 20;
+        SleepScore -= amount;
         SleepScoreText.text = SleepScore.ToString();
     
     }
@@ -29,7 +30,8 @@ public class LogicScript : MonoBehaviour
     public void GameOver()
     {
         GameOverScreen.SetActive(true);
-
+        Hint.SetActive(false);
+        SleepScoreText.gameObject.SetActive(false);
     }
 
 }
