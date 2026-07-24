@@ -29,7 +29,7 @@ public class PhoneScript : MonoBehaviour
 
     IEnumerator PhoneSequence()
     {
-        yield return new WaitForSeconds(0);
+        yield return new WaitForSeconds(45);
 
        phoneCoroutine = StartCoroutine(PhoneRings());
  
