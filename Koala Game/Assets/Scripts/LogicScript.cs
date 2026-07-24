@@ -17,7 +17,12 @@ public class LogicScript : MonoBehaviour
 
         SleepScore -= amount;
         SleepScoreText.text = SleepScore.ToString();
-    
+
+        if (SleepScore <= 0)
+        {
+            GameOver();
+        }
+
     }
 
     public void RestartGame()

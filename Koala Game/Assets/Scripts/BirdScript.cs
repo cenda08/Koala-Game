@@ -14,6 +14,7 @@ public class BirdScript : MonoBehaviour
     private bool canClickBird = false;
     private bool BirdStopped = true;
     public float TargetLeft;
+    private bool BirdIsSinging = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,7 +26,11 @@ public class BirdScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (BirdIsSinging && Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("SPACE");
+            canClickBird = true;
+        }
     }
 
     IEnumerator BirdSequence()
@@ -73,45 +78,50 @@ IEnumerator BirdSingsSequence()
     
     IEnumerator BirdSings()
     {
+        BirdStopped = false;
         canClickBird = false;
+        BirdIsSinging = true;
         spriteRenderer.color = Color.red;
         Debug.Log("BIRD SINGS START");
         float timer = 0;
 
 
 
-        yield return new WaitForSeconds(3);
-    
-
-        
-
-        while (timer < 3)
+        while (timer < 3 && !BirdStopped)
         {
-            BirdStopped = false;
             timer += Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                Debug.Log("ENTER");
-                canClickBird = true;
+            Debug.Log("čekám na space");
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+             //   Debug.Log("SPACE");
+             //   canClickBird = true;
 
-            }
-           if (canClickBird == true && Input.GetMouseButtonDown(0))
-            {
-              
-                BirdStopped = true;
-                spriteRenderer.color = Color.yellow;
-            }
-
+           // }
             yield return null;
+
+        }
+        
             spriteRenderer.color = Color.yellow;
             Debug.Log("KONEC BIRD SINGS");
            
-        }
+        
 
         if (!BirdStopped)
         {
             logic.ScoreDecrease(5);
         }
+
+
+        BirdIsSinging = false;
     }
 
+
+    void OnMouseDown()
+    {
+        if (canClickBird == true)
+        {
+            BirdStopped = true;
+            spriteRenderer.color = Color.yellow;
+        }
     }
+}
