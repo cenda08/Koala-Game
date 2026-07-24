@@ -95,25 +95,21 @@ IEnumerator BirdSingsSequence()
             Debug.Log("čekám na space");
             //if (Input.GetKeyDown(KeyCode.Space))
             //{
-             //   Debug.Log("SPACE");
-             //   canClickBird = true;
+            //   Debug.Log("SPACE");
+            //   canClickBird = true;
 
-           // }
+            // }
             yield return null;
 
         }
-        
-            spriteRenderer.color = Color.yellow;
-            Debug.Log("KONEC BIRD SINGS");
-           
-        
-
         if (!BirdStopped)
         {
             logic.ScoreDecrease(5);
         }
-
-
+     
+        spriteRenderer.color = Color.yellow;
+            Debug.Log("KONEC BIRD SINGS");
+           
         BirdIsSinging = false;
     }
 

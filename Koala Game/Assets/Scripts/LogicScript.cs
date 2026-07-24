@@ -11,6 +11,10 @@ public class LogicScript : MonoBehaviour
     public Text FinalSleepScoreText;
     public GameObject GameOverScreen;
     public GameObject Hint;
+    public GameObject HintScreen;
+    public GameObject Star1;
+    public GameObject Star2;
+    public GameObject Star3;
 
     [ContextMenu ("Decrease Sleep Score")]
     public void ScoreDecrease(int amount) {
@@ -18,11 +22,11 @@ public class LogicScript : MonoBehaviour
         SleepScore -= amount;
         SleepScoreText.text = SleepScore.ToString();
 
-        if (SleepScore <= 0)
+        /*if (SleepScore <= 0)
         {
             GameOver();
         }
-
+        */
     }
 
     public void RestartGame()
@@ -36,7 +40,31 @@ public class LogicScript : MonoBehaviour
     {
         GameOverScreen.SetActive(true);
         Hint.SetActive(false);
+        FinalSleepScoreText.text = SleepScore.ToString();
         SleepScoreText.gameObject.SetActive(false);
+        HintScreen.SetActive(false);
+        StarsCount();
     }
 
+
+    public void StarsCount()
+    {
+        if (0 < SleepScore && SleepScore <= 35)
+        {
+            Star1.SetActive(true);
+        }
+
+        else if (25 < SleepScore && SleepScore <= 74)
+        {
+            Star1.SetActive(true);
+            Star2.SetActive(true);
+        }
+
+        else if (75 <= SleepScore && SleepScore <= 100)
+        {
+            Star1.SetActive(true);
+            Star2.SetActive(true);
+            Star3.SetActive(true);
+        }
+    }
 }
