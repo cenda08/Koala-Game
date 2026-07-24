@@ -1278,7 +1278,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1396196553
 Transform:
   m_ObjectHideFlags: 0
@@ -1294,8 +1294,8 @@ Transform:
   m_Children:
   - {fileID: 348646066}
   - {fileID: 1628025432}
-  - {fileID: 2138751666}
   - {fileID: 1054813414}
+  - {fileID: 2138751666}
   - {fileID: 356303855}
   - {fileID: 1862381031}
   m_Father: {fileID: 1407429511}

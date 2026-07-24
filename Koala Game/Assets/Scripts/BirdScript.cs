@@ -28,7 +28,8 @@ public class BirdScript : MonoBehaviour
     {
         if (BirdIsSinging && Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("SPACE");
+            Debug.Log("SPACE STISKNUT");
+            Debug.Log("BirdIsSinging: " + BirdIsSinging);
             canClickBird = true;
         }
     }
@@ -78,6 +79,7 @@ IEnumerator BirdSingsSequence()
     
     IEnumerator BirdSings()
     {
+        Debug.Log("BirdIsSinging TRUE");
         BirdStopped = false;
         canClickBird = false;
         BirdIsSinging = true;
