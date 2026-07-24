@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PhoneScript : MonoBehaviour
 {
-
+    public GameObject Phone;
     public LogicScript logic;
     public GameObject HintScreen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -16,10 +16,15 @@ public class PhoneScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        void OnMouseDown()
-        {
+        
+    }
 
-            HintScreen.SetActive(true);
-        }
+    IEnumerator OnMouseDown()
+    {
+
+        HintScreen.SetActive(true);
+        yield return new WaitForSeconds(7);
+        HintScreen.SetActive(false);
+        yield return null;
     }
 }
