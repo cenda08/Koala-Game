@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class BirdScript : MonoBehaviour
 
@@ -26,14 +27,9 @@ public class BirdScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (BirdIsSinging && Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("SPACE STISKNUT");
-            Debug.Log("BirdIsSinging: " + BirdIsSinging);
-            canClickBird = true;
-        }
     }
-
+    
+    // Začátek Bird Života
     IEnumerator BirdSequence()
     {
         yield return new WaitForSeconds(15);
@@ -41,24 +37,22 @@ public class BirdScript : MonoBehaviour
         StartCoroutine(BirdOn());
     }
 
+    // Let Birda
     IEnumerator BirdOn()
     {
-     
-
         while (transform.position.x <= TargetRight)
         {
             transform.Translate(Vector3.right * BirdSpeed * Time.deltaTime);
             Debug.Log("pták doprava");
             yield return null;
-
         }
 
         yield return new WaitForSeconds(5);
         StartCoroutine(BirdSingsSequence());
     }
     
-
-IEnumerator BirdSingsSequence()
+    // Začátek/Konec zpěvu Birda
+    IEnumerator BirdSingsSequence()
         {
         for (int i = 0; i<3; i++)
         {
@@ -70,56 +64,58 @@ IEnumerator BirdSingsSequence()
         while (transform.position.x >= TargetLeft)
         {
             transform.Translate(Vector3.left * BirdSpeed * Time.deltaTime);
-            Debug.Log("pták odjizdi");
+            Debug.Log("pták odjíždí");
             yield return null;
 
         }
         yield return null;
     }
     
+    // Správa eventu clicknutí na Birda (nutnost collideru, jinak nefunguje)
+    void OnMouseDown()
+        {
+            if (canClickBird)
+            {
+                Debug.Log("Left click stisknut!");
+                BirdStopped = true;
+                canClickBird = false;
+                spriteRenderer.color = Color.yellow;
+            }
+        }
+
+    // Samotný zpěv Birda    
     IEnumerator BirdSings()
     {
         Debug.Log("BirdIsSinging TRUE");
-        BirdStopped = false;
         canClickBird = false;
         BirdIsSinging = true;
+        BirdStopped = false;
         spriteRenderer.color = Color.red;
         Debug.Log("BIRD SINGS START");
         float timer = 0;
+        
 
-
-
-        while (timer < 3 && !BirdStopped)
+        // 3s timer + kontrola kliknutí space
+        while (timer < 3 && BirdIsSinging)
         {
             timer += Time.deltaTime;
-            Debug.Log("čekám na space");
-            //if (Input.GetKeyDown(KeyCode.Space))
-            //{
-            //   Debug.Log("SPACE");
-            //   canClickBird = true;
-
-            // }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("SPACE STISKNUT");
+                Debug.Log("BirdIsSinging: " + BirdIsSinging);
+                canClickBird = true;
+            }
             yield return null;
 
         }
+        // Logic systém ztráty bodů
         if (!BirdStopped)
         {
             logic.ScoreDecrease(5);
         }
-     
         spriteRenderer.color = Color.yellow;
             Debug.Log("KONEC BIRD SINGS");
-           
+        canClickBird = false;   
         BirdIsSinging = false;
-    }
-
-
-    void OnMouseDown()
-    {
-        if (canClickBird == true)
-        {
-            BirdStopped = true;
-            spriteRenderer.color = Color.yellow;
-        }
     }
 }
