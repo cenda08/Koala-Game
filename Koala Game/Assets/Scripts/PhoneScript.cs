@@ -97,6 +97,7 @@ public class PhoneScript : MonoBehaviour
         HintScreen.SetActive(true);
         yield return new WaitForSeconds(7);
         HintScreen.SetActive(false);
+        logic.ScoreDecrease(3);
     }
 
     IEnumerator AcceptTimer()
