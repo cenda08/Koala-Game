@@ -75,6 +75,8 @@ public class BirdScript : MonoBehaviour
         Started = false;
         logic.eventCycle.RemoveAt(0);
         logic.eventCooldowns.RemoveAt(0);
+        logic.CurrentPhase++;
+        logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
         yield return null;
     }
     

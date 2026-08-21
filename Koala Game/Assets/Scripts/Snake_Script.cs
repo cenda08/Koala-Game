@@ -37,6 +37,8 @@ public class Snake_Script : MonoBehaviour
             logic.GameOver();
             logic.eventCycle.RemoveAt(0);
             logic.eventCooldowns.RemoveAt(0);
+            logic.CurrentPhase++;
+            logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
             Started = false;
         }
     }

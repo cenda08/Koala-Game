@@ -10,7 +10,9 @@ public class LogicScript : MonoBehaviour
 {
 
     public int SleepScore;
+    public int CurrentPhase = 1;
     public Text SleepScoreText;
+    public Text TimerText;
     public Text FinalSleepScoreText;
     public GameObject GameOverScreen;
     public GameObject Hint;
@@ -20,19 +22,21 @@ public class LogicScript : MonoBehaviour
     public GameObject Star3;
     public List<string> eventCycle = new List<string>();
     public List<float> eventCooldowns = new List<float>();
+    public int TotalEvents = 3; // Celkový počet eventů
 
     [ContextMenu ("Randomize all Events")]
     public void RandomizeEvents()
     {
-        string[] events = {"Bird", "Snake", "Phone"};
-        for(int i=0; i<3; i++)
+        string[] events = {"Bird", "Snake", "Phone"}; // Array, ze kterého beru názvy eventů na random generování cycklu - CaseSensitive
+        for(int i=0; i<TotalEvents; i++)
         {
             int x = UnityEngine.Random.Range(0,events.Length);
-            float randomCooldown = UnityEngine.Random.Range(0,10);
+            float randomCooldown = UnityEngine.Random.Range(0,10); // Cooldown mezi eventy
             eventCycle.Add(events[x]);
             eventCooldowns.Add(randomCooldown);
         }
-        eventCooldowns[0] = 3;
+        eventCooldowns[0] = 3; // Cooldown od prvního eventu
+        
         foreach(String i in eventCycle)
         {
             Debug.Log(i);
@@ -42,6 +46,7 @@ public class LogicScript : MonoBehaviour
     void Start()
     {
         RandomizeEvents();
+        TimerText.text = CurrentPhase.ToString() + " / " + TotalEvents;
     }
     void Update()
     {

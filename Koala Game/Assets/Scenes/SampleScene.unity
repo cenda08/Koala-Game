@@ -322,7 +322,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   SleepScore: 100
+  CurrentPhase: 0
   SleepScoreText: {fileID: 15333033}
+  TimerText: {fileID: 148443452}
   FinalSleepScoreText: {fileID: 1862381032}
   GameOverScreen: {fileID: 1396196552}
   Hint: {fileID: 375153761}
@@ -330,6 +332,9 @@ MonoBehaviour:
   Star1: {fileID: 512497087}
   Star2: {fileID: 506579840}
   Star3: {fileID: 60544972}
+  eventCycle: []
+  eventCooldowns: []
+  TotalEvents: 3
 --- !u!4 &114468017
 Transform:
   m_ObjectHideFlags: 0
@@ -437,6 +442,85 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!1 &148443450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 148443451}
+  - component: {fileID: 148443453}
+  - component: {fileID: 148443452}
+  m_Layer: 5
+  m_Name: Timer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &148443451
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148443450}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1407429511}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1147, y: 690}
+  m_SizeDelta: {x: 298.2, y: 57.4}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &148443452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148443450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 1466fc350b43fe340bf863ec5a93ca7e, type: 3}
+    m_FontSize: 50
+    m_FontStyle: 2
+    m_BestFit: 0
+    m_MinSize: 5
+    m_MaxSize: 50
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &148443453
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148443450}
+  m_CullTransparentMesh: 1
 --- !u!1 &242076138
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,6 +915,7 @@ MonoBehaviour:
   Decline: {fileID: 440452439}
   CanClickHint: 1
   vykricnik: {fileID: 1161966327}
+  Started: 0
 --- !u!1 &345024944
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,6 +1031,7 @@ MonoBehaviour:
   TargetRight: 1.45
   TargetRight2: 2.29
   logic: {fileID: 114468016}
+  Started: 0
 --- !u!1 &348646065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,6 +1522,7 @@ MonoBehaviour:
   CarSpeed: 0.5
   TargetDown: -5.32
   logic: {fileID: 0}
+  Started: 0
 --- !u!1 &506579840
 GameObject:
   m_ObjectHideFlags: 0
@@ -2663,6 +2750,7 @@ MonoBehaviour:
   logic: {fileID: 114468016}
   spriteRenderer: {fileID: 1173090330}
   TargetLeft: -9.94
+  Started: 0
 --- !u!114 &1173090333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2952,6 +3040,7 @@ RectTransform:
   - {fileID: 375153762}
   - {fileID: 15333032}
   - {fileID: 2130895592}
+  - {fileID: 148443451}
   - {fileID: 1396196553}
   - {fileID: 1974231533}
   - {fileID: 2080508427}
