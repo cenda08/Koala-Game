@@ -14,6 +14,7 @@ public class Snake_Script : MonoBehaviour
     public float TargetRight2;
     public LogicScript logic;
     private bool SnakeIsMoving = false;
+    public bool Started = false;
     //private bool SnakeIsMoving = false;
 
 
@@ -21,19 +22,29 @@ public class Snake_Script : MonoBehaviour
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-        StartCoroutine(SnakeSequence());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (SnakeIsMoving == true && (Input.anyKeyDown))
+        if (logic.eventCycle.Count > 0 && logic.eventCycle[0] == "Snake" && !Started)
+        {
+            StartCoroutine(SnakeSequence());
+            Started = true;
+        }
+        if (SnakeIsMoving == true && Input.anyKeyDown)
+        {
             logic.GameOver();
+            logic.eventCycle.RemoveAt(0);
+            logic.eventCooldowns.RemoveAt(0);
+            Started = false;
+        }
     }
 
     IEnumerator SnakeSequence()
     {
-        yield return new WaitForSeconds(5);
+        Debug.Log("Starting SnakeScript, cooldown:" + logic.eventCooldowns[0]);
+        yield return new WaitForSeconds(logic.eventCooldowns[0]);
 
         StartCoroutine(SnakeMovement());
 
@@ -96,7 +107,10 @@ public class Snake_Script : MonoBehaviour
             yield return null;
         }
 
-        SnakeIsMoving = false; 
+        SnakeIsMoving = false;
+        logic.eventCycle.RemoveAt(0);
+        logic.eventCooldowns.RemoveAt(0);
+        Started = false;
     }
     }
 

@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System;
+using UnityEditor.PackageManager;
+using System.Linq;
 public class LogicScript : MonoBehaviour
 {
 
@@ -15,6 +18,38 @@ public class LogicScript : MonoBehaviour
     public GameObject Star1;
     public GameObject Star2;
     public GameObject Star3;
+    public List<string> eventCycle = new List<string>();
+    public List<float> eventCooldowns = new List<float>();
+
+    [ContextMenu ("Randomize all Events")]
+    public void RandomizeEvents()
+    {
+        string[] events = {"Bird", "Snake", "Phone"};
+        for(int i=0; i<3; i++)
+        {
+            int x = UnityEngine.Random.Range(0,events.Length);
+            float randomCooldown = UnityEngine.Random.Range(0,10);
+            eventCycle.Add(events[x]);
+            eventCooldowns.Add(randomCooldown);
+        }
+        eventCooldowns[0] = 3;
+        foreach(String i in eventCycle)
+        {
+            Debug.Log(i);
+        }
+    }
+
+    void Start()
+    {
+        RandomizeEvents();
+    }
+    void Update()
+    {
+        if(eventCycle.Count == 0)
+        {
+            GameOver();
+        }
+    }
 
     [ContextMenu ("Decrease Sleep Score")]
     public void ScoreDecrease(int amount) {
@@ -22,13 +57,9 @@ public class LogicScript : MonoBehaviour
         SleepScore -= amount;
         SleepScoreText.text = SleepScore.ToString();
 
-        /*if (SleepScore <= 0)
-        {
-            GameOver();
-        }
-        */
     }
 
+    [ContextMenu ("Restart Game")]
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -36,6 +67,7 @@ public class LogicScript : MonoBehaviour
 
     }
 
+    [ContextMenu ("End Game")]
     public void GameOver()
     {
         GameOverScreen.SetActive(true);
