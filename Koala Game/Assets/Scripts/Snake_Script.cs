@@ -37,7 +37,6 @@ public class Snake_Script : MonoBehaviour
             logic.GameOver();
             logic.eventCycle.RemoveAt(0);
             logic.eventCooldowns.RemoveAt(0);
-            logic.CurrentPhase++;
             logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
             Started = false;
         }
@@ -60,7 +59,7 @@ public class Snake_Script : MonoBehaviour
        while (transform.position.y >= TargetDown)
         {
             transform.Translate(Vector3.down * SnakeSpeed * Time.deltaTime);
-            Debug.Log ("pohyb dolů");
+            //Debug.Log ("pohyb dolů");
             yield return null;
 
         }
@@ -69,14 +68,14 @@ public class Snake_Script : MonoBehaviour
         while (transform.position.x <= TargetRight)
         {
             transform.Translate(Vector3.right * SnakeSpeed * Time.deltaTime);
-            Debug.Log("pohyb doprava");
+            //Debug.Log("pohyb doprava");
             yield return null;
         }
 
         while (transform.position.y <= TargetUp)
         {
             transform.Translate(Vector3.up * SnakeSpeed * Time.deltaTime);
-            Debug.Log("pohybnahoru");
+           //Debug.Log("pohyb nahoru");
             yield return null;
         }
 
@@ -84,7 +83,7 @@ public class Snake_Script : MonoBehaviour
         while (transform.position.x <= TargetRight2)
         {
             transform.Translate(Vector3.right * SnakeSpeed * Time.deltaTime * 1/2);
-            Debug.Log("pohyb doprava");
+            //Debug.Log("pohyb doprava");
             yield return null;
         }
 
@@ -98,20 +97,21 @@ public class Snake_Script : MonoBehaviour
         while (transform.position.x >= TargetLeft)
         {
             transform.Translate(Vector3.left * SnakeSpeed * Time.deltaTime);
-            Debug.Log("pohyb doleva");
+            //Debug.Log("pohyb doleva");
             yield return null;
 
         }
         while (transform.position.y <= TargetUp2)
         {
             transform.Translate(Vector3.up* SnakeSpeed * Time.deltaTime);
-            Debug.Log("pohybnahoru");
+            //Debug.Log("pohybnahoru");
             yield return null;
         }
 
         SnakeIsMoving = false;
         logic.eventCycle.RemoveAt(0);
         logic.eventCooldowns.RemoveAt(0);
+        logic.CurrentPhase++;
         Started = false;
     }
     }

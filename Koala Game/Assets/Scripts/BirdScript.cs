@@ -17,11 +17,14 @@ public class BirdScript : MonoBehaviour
     public float TargetLeft;
     private bool BirdIsSinging = false;
     public bool Started = false;
+    public int Random;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spriteRenderer.color = Color.yellow;
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+        //Random = UnityEngine.Random.Range(0,1);
+        Random = 1;
     }
 
     // Update is called once per frame
@@ -31,7 +34,17 @@ public class BirdScript : MonoBehaviour
         {
             StartCoroutine(BirdSequence());
             Started = true;
-        }       
+        }
+    if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Bird")
+        {
+            if(Random == 1)
+            {
+                Debug.Log("Double event! Bird");
+                StartCoroutine(BirdSequence());
+                Started = true;
+            }
+        }  
+
     }
     
     // Začátek Bird Života
@@ -62,7 +75,7 @@ public class BirdScript : MonoBehaviour
         for (int i = 0; i<3; i++)
         {
             yield return StartCoroutine(BirdSings());
-            float RandomPauseTime = Random.Range(5f, 10f);
+            float RandomPauseTime = UnityEngine.Random.Range(5f, 10f);
             yield return new WaitForSeconds(RandomPauseTime);
         }
 
@@ -75,6 +88,7 @@ public class BirdScript : MonoBehaviour
         Started = false;
         logic.eventCycle.RemoveAt(0);
         logic.eventCooldowns.RemoveAt(0);
+        Random = UnityEngine.Random.Range(0,1);
         logic.CurrentPhase++;
         logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
         yield return null;

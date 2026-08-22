@@ -22,12 +22,12 @@ public class LogicScript : MonoBehaviour
     public GameObject Star3;
     public List<string> eventCycle = new List<string>();
     public List<float> eventCooldowns = new List<float>();
-    public int TotalEvents = 3; // Celkový počet eventů
+    public int TotalEvents = 10; // Celkový počet eventů
 
     [ContextMenu ("Randomize all Events")]
     public void RandomizeEvents()
     {
-        string[] events = {"Bird", "Snake", "Phone"}; // Array, ze kterého beru názvy eventů na random generování cycklu - CaseSensitive
+        string[] events = {"Bird", "Snake", "Phone", "Phone", "Bird"}; // Array, ze kterého beru názvy eventů na random generování cycklu - CaseSensitive
         for(int i=0; i<TotalEvents; i++)
         {
             int x = UnityEngine.Random.Range(0,events.Length);
@@ -52,6 +52,7 @@ public class LogicScript : MonoBehaviour
     {
         if(eventCycle.Count == 0)
         {
+            new WaitForSeconds(10);
             GameOver();
         }
     }

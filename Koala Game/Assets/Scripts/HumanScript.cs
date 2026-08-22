@@ -20,9 +20,11 @@ public class CarScript : MonoBehaviour
     private bool CanClickCar = false;
     private bool CarStopped = true;
     public bool Started = false;
+    public int Random;
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+        Random = UnityEngine.Random.Range(0,1);
     }
 
 
@@ -30,10 +32,18 @@ public class CarScript : MonoBehaviour
     void Update()
     {
         if (logic.eventCycle.Count > 0 && logic.eventCycle[0] == "Car" && !Started)
-            {
-                StartCoroutine(CarSequence());
-                Started = true;
-            }
+        {
+            StartCoroutine(CarSequence());
+            Started = true;
+        }
+        if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Phone")
+        {
+            if(Random == 1)
+                {
+                    StartCoroutine(CarSequence());
+                    Started = true;
+                }
+        }     
         //if (se hitne Car collider s koala colliderem)
         //logic.GameOver();
 
@@ -103,6 +113,8 @@ public class CarScript : MonoBehaviour
             CanClickCar = false;
             logic.eventCycle.RemoveAt(0);
             logic.eventCooldowns.RemoveAt(0);
+            logic.eventCooldowns.RemoveAt(0);
+            Random = UnityEngine.Random.Range(0,1);
             logic.CurrentPhase++;
             logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
             Started = false;

@@ -12,11 +12,14 @@ public class PhoneScript : MonoBehaviour
     public GameObject vykricnik;
     private Coroutine phoneCoroutine;
     public bool Started = false;
+    public int Random;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
+        //Random = UnityEngine.Random.Range(0,1);
+        Random = 1;
     }
 
     // Update is called once per frame
@@ -27,6 +30,15 @@ public class PhoneScript : MonoBehaviour
             StartCoroutine(PhoneSequence());
             Started = true;
         }
+        if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Phone")
+        {
+            if(Random == 1)
+                {
+                    Debug.Log("Double event! Mobil");
+                    StartCoroutine(PhoneSequence());
+                    Started = true;
+                }
+        } 
        // if (CanClickHint == false &&)
     }
 
@@ -86,6 +98,7 @@ public class PhoneScript : MonoBehaviour
         vykricnik.SetActive(false);
         logic.eventCycle.RemoveAt(0);
         logic.eventCooldowns.RemoveAt(0);
+        Random = UnityEngine.Random.Range(0,1);
         logic.CurrentPhase++;
         logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
         Started = false;
