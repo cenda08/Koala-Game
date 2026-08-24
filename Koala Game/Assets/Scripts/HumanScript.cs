@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 public class CarScript : MonoBehaviour
 
@@ -18,29 +19,43 @@ public class CarScript : MonoBehaviour
     private bool CanLoadGun = false;
     private bool CanClickCar = false;
     private bool CarStopped = true;
+    public bool Started = false;
+    public int Random;
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-        StartCoroutine (CarSequence());
+        Random = UnityEngine.Random.Range(0,1);
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if (logic.eventCycle.Count > 0 && logic.eventCycle[0] == "Car" && !Started)
+        {
+            StartCoroutine(CarSequence());
+            Started = true;
+        }
+        if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Phone")
+        {
+            if(Random == 1)
+                {
+                    StartCoroutine(CarSequence());
+                    Started = true;
+                }
+        }     
         //if (se hitne Car collider s koala colliderem)
         //logic.GameOver();
 
         //if když se Car pohybuje a udělá se prvně scroll button a pak namíření na Car (1 + 1 OnMouseDown jak v BirdScript) tak se skončí coroutine, ale odečte se 15 sleep score 
-        
+
     }
 
     IEnumerator CarSequence()
     {
-        yield return new WaitForSeconds(0);
-
+        Debug.Log("Starting CarScript, cooldown:" + logic.eventCooldowns[0]);
+        yield return new WaitForSeconds(logic.eventCooldowns[0]);
         StartCoroutine(CarMovement());
-
     }
 
     IEnumerator CarMovement()
@@ -96,7 +111,13 @@ public class CarScript : MonoBehaviour
             CarStopped = true;
             CanLoadGun = false;
             CanClickCar = false;
-       
+            logic.eventCycle.RemoveAt(0);
+            logic.eventCooldowns.RemoveAt(0);
+            logic.eventCooldowns.RemoveAt(0);
+            Random = UnityEngine.Random.Range(0,1);
+            logic.CurrentPhase++;
+            logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
+            Started = false;
         }
     }
     //ukončení auta když se hitne gun a loadne se a namíří se na auto

@@ -11,17 +11,34 @@ public class PhoneScript : MonoBehaviour
     public bool CanClickHint = true;
     public GameObject vykricnik;
     private Coroutine phoneCoroutine;
+    public bool Started = false;
+    public int Random;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-        StartCoroutine (PhoneSequence());
+        //Random = UnityEngine.Random.Range(0,1);
+        Random = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (logic.eventCycle.Count > 0 && logic.eventCycle[0] == "Phone" && !Started)
+        {
+            StartCoroutine(PhoneSequence());
+            Started = true;
+        }
+        if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Phone")
+        {
+            if(Random == 1)
+                {
+                    Debug.Log("Double event! Mobil");
+                    StartCoroutine(PhoneSequence());
+                    Started = true;
+                }
+        } 
        // if (CanClickHint == false &&)
     }
 
@@ -29,7 +46,8 @@ public class PhoneScript : MonoBehaviour
 
     IEnumerator PhoneSequence()
     {
-        yield return new WaitForSeconds(45);
+        Debug.Log("Starting PhoneScript, cooldown:" + logic.eventCooldowns[0]);
+        yield return new WaitForSeconds(logic.eventCooldowns[0]);
 
        phoneCoroutine = StartCoroutine(PhoneRings());
  
@@ -53,7 +71,6 @@ public class PhoneScript : MonoBehaviour
       
     }
     public void DeclineCall() {
-       
         StopCoroutine(phoneCoroutine);
         EndPhone();
     }
@@ -65,7 +82,7 @@ public class PhoneScript : MonoBehaviour
         Decline.SetActive(false);
         vykricnik.SetActive(false);
 
-
+        
         StopCoroutine(phoneCoroutine);
 
 
@@ -79,7 +96,12 @@ public class PhoneScript : MonoBehaviour
         Accept.SetActive(false);
         Decline.SetActive(false);
         vykricnik.SetActive(false);
-
+        logic.eventCycle.RemoveAt(0);
+        logic.eventCooldowns.RemoveAt(0);
+        Random = UnityEngine.Random.Range(0,1);
+        logic.CurrentPhase++;
+        logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
+        Started = false;
         CanClickHint = true;
     }
 

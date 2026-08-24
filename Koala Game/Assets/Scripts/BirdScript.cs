@@ -12,28 +12,46 @@ public class BirdScript : MonoBehaviour
     public SpriteRenderer spriteRenderer;
    // public Sprite BirdSingsSprite;
     //public Sprite CalmBirdSprite;// DO BUDOUCNA NA ZMĚNU SPRITU A ANIMACE
-    private bool canClickBird = false;
+    private bool CanClickBird = false;
     private bool BirdStopped = true;
     public float TargetLeft;
     private bool BirdIsSinging = false;
+    public bool Started = false;
+    public int Random;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         spriteRenderer.color = Color.yellow;
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-        StartCoroutine(BirdSequence());
+        //Random = UnityEngine.Random.Range(0,1);
+        Random = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+    if (logic.eventCycle.Count > 0 && logic.eventCycle[0] == "Bird" && !Started)
+        {
+            StartCoroutine(BirdSequence());
+            Started = true;
+        }
+    if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Bird")
+        {
+            if(Random == 1)
+            {
+                Debug.Log("Double event! Bird");
+                StartCoroutine(BirdSequence());
+                Started = true;
+            }
+        }  
+
     }
     
     // Začátek Bird Života
     IEnumerator BirdSequence()
     {
-        yield return new WaitForSeconds(15);
-
+        Debug.Log("Starting BirdScript, cooldown:" + logic.eventCooldowns[0]);
+        yield return new WaitForSeconds(logic.eventCooldowns[0]);
         StartCoroutine(BirdOn());
     }
 
@@ -57,7 +75,7 @@ public class BirdScript : MonoBehaviour
         for (int i = 0; i<3; i++)
         {
             yield return StartCoroutine(BirdSings());
-            float RandomPauseTime = Random.Range(5f, 10f);
+            float RandomPauseTime = UnityEngine.Random.Range(5f, 10f);
             yield return new WaitForSeconds(RandomPauseTime);
         }
 
@@ -66,19 +84,24 @@ public class BirdScript : MonoBehaviour
             transform.Translate(Vector3.left * BirdSpeed * Time.deltaTime);
             Debug.Log("pták odjíždí");
             yield return null;
-
         }
+        Started = false;
+        logic.eventCycle.RemoveAt(0);
+        logic.eventCooldowns.RemoveAt(0);
+        Random = UnityEngine.Random.Range(0,1);
+        logic.CurrentPhase++;
+        logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
         yield return null;
     }
     
     // Správa eventu clicknutí na Birda (nutnost collideru, jinak nefunguje)
     void OnMouseDown()
         {
-            if (canClickBird)
+            if (CanClickBird)
             {
                 Debug.Log("Left click stisknut!");
                 BirdStopped = true;
-                canClickBird = false;
+                CanClickBird = false;
                 spriteRenderer.color = Color.yellow;
             }
         }
@@ -87,7 +110,7 @@ public class BirdScript : MonoBehaviour
     IEnumerator BirdSings()
     {
         Debug.Log("BirdIsSinging TRUE");
-        canClickBird = false;
+        CanClickBird = false;
         BirdIsSinging = true;
         BirdStopped = false;
         spriteRenderer.color = Color.red;
@@ -103,7 +126,7 @@ public class BirdScript : MonoBehaviour
             {
                 Debug.Log("SPACE STISKNUT");
                 Debug.Log("BirdIsSinging: " + BirdIsSinging);
-                canClickBird = true;
+                CanClickBird = true;
             }
             yield return null;
 
@@ -114,8 +137,8 @@ public class BirdScript : MonoBehaviour
             logic.ScoreDecrease(5);
         }
         spriteRenderer.color = Color.yellow;
-            Debug.Log("KONEC BIRD SINGS");
-        canClickBird = false;   
+        Debug.Log("KONEC BIRD SINGS");
+        CanClickBird = false;   
         BirdIsSinging = false;
     }
 }
