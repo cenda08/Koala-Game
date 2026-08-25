@@ -80,7 +80,7 @@ public class PhoneScript : MonoBehaviour
         CanClickHint = false;
         Accept.SetActive(true);
         Decline.SetActive(false);
-        vykricnik.SetActive(false);
+        vykricnik.SetActive(true);
 
         
         StopCoroutine(phoneCoroutine);
