@@ -27,7 +27,7 @@ public class LogicScript : MonoBehaviour
     [ContextMenu ("Randomize all Events")]
     public void RandomizeEvents()
     {
-        string[] events = {"Bird", "Snake", "Phone", "Phone", "Bird"}; // Array, ze kterého beru názvy eventů na random generování cycklu - CaseSensitive
+        string[] events = {"Bird", "Snake", "Phone", "Phone", "Bird", "Car"}; // Array, ze kterého beru názvy eventů na random generování cycklu - CaseSensitive
         for(int i=0; i<TotalEvents; i++)
         {
             int x = UnityEngine.Random.Range(0,events.Length);
@@ -44,7 +44,7 @@ public class LogicScript : MonoBehaviour
     }
 
     void Start()
-    {
+    {string difficulty = ButtonController.ChosenDifficulty; 
         RandomizeEvents();
         TimerText.text = CurrentPhase.ToString() + " / " + TotalEvents;
     }
@@ -55,6 +55,9 @@ public class LogicScript : MonoBehaviour
             new WaitForSeconds(10);
             GameOver();
         }
+        if(SleepScore == 0)
+        {
+            GameOver();        }
     }
 
     [ContextMenu ("Decrease Sleep Score")]
@@ -74,15 +77,26 @@ public class LogicScript : MonoBehaviour
     }
 
     [ContextMenu ("End Game")]
+
     public void GameOver()
     {
+        StartCoroutine(GameOverSequence());
+    }
+
+    IEnumerator GameOverSequence()
+    { 
         GameOverScreen.SetActive(true);
         Hint.SetActive(false);
         FinalSleepScoreText.text = SleepScore.ToString();
         SleepScoreText.gameObject.SetActive(false);
         HintScreen.SetActive(false);
         StarsCount();
+        yield return null;
+        // tady se zobrazí Game Over screen
     }
+  
+
+
 
 
     public void StarsCount()

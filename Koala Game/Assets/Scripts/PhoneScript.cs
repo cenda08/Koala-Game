@@ -1,9 +1,12 @@
-using UnityEngine;
 using System.Collections;
+using System.Numerics;
+using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class PhoneScript : MonoBehaviour
 {
     public GameObject Phone;
+    public bool PhoneIsRinging = false;
     public LogicScript logic;
     public GameObject HintScreen;
     public GameObject Accept;
@@ -12,6 +15,8 @@ public class PhoneScript : MonoBehaviour
     public GameObject vykricnik;
     private Coroutine phoneCoroutine;
     public bool Started = false;
+    public Transform AcceptPosition;
+    public Transform AcceptPosition2;
     public int Random;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -55,6 +60,8 @@ public class PhoneScript : MonoBehaviour
     }
     IEnumerator PhoneRings()
     {
+        Accept.transform.position = AcceptPosition2.position;
+        PhoneIsRinging = true;
         logic.Hint.SetActive(false);
         CanClickHint = false;
         vykricnik.SetActive(true);
@@ -81,8 +88,8 @@ public class PhoneScript : MonoBehaviour
         Accept.SetActive(true);
         Decline.SetActive(false);
         vykricnik.SetActive(true);
+        Accept.transform.position = AcceptPosition.position;
 
-        
         StopCoroutine(phoneCoroutine);
 
 
@@ -103,6 +110,7 @@ public class PhoneScript : MonoBehaviour
         logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
         Started = false;
         CanClickHint = true;
+        Accept.transform.position = AcceptPosition2.position;
     }
 
     void OnMouseDown()

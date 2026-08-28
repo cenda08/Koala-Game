@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Logic
   - Gun
+  - Bird
+  - Phone
+  - Car
   layers:
   - Default
   - TransparentFX

@@ -15,13 +15,16 @@ public class BirdScript : MonoBehaviour
     private bool CanClickBird = false;
     private bool BirdStopped = true;
     public float TargetLeft;
-    private bool BirdIsSinging = false;
+    public bool BirdIsSinging = false;
     public bool Started = false;
     public int Random;
+    [SerializeField] public Animator BirdAnimator;
+    [SerializeField] public Animator StoneAnimator;
+    [SerializeField] public Animator _KoalaAnimation;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        spriteRenderer.color = Color.yellow;
+        //spriteRenderer.color = Color.yellow;
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         //Random = UnityEngine.Random.Range(0,1);
         Random = 1;
@@ -58,20 +61,25 @@ public class BirdScript : MonoBehaviour
     // Let Birda
     IEnumerator BirdOn()
     {
+        transform.localScale = new Vector3(1f, 1f, 1f);
+        BirdAnimator.SetBool("IsLeaving", false);
+        BirdAnimator.SetBool("IsComing", true);
         while (transform.position.x <= TargetRight)
         {
             transform.Translate(Vector3.right * BirdSpeed * Time.deltaTime);
             Debug.Log("pták doprava");
             yield return null;
         }
-
+        BirdAnimator.SetBool("IsComing", false);
         yield return new WaitForSeconds(5);
         StartCoroutine(BirdSingsSequence());
     }
     
     // Začátek/Konec zpěvu Birda
     IEnumerator BirdSingsSequence()
-        {
+    {
+    
+        BirdIsSinging = true;
         for (int i = 0; i<3; i++)
         {
             yield return StartCoroutine(BirdSings());
@@ -79,8 +87,11 @@ public class BirdScript : MonoBehaviour
             yield return new WaitForSeconds(RandomPauseTime);
         }
 
+        BirdAnimator.SetBool("IsLeaving", true);
+        transform.localScale = new Vector3(-1f, 1f, 1f);
         while (transform.position.x >= TargetLeft)
         {
+      
             transform.Translate(Vector3.left * BirdSpeed * Time.deltaTime);
             Debug.Log("pták odjíždí");
             yield return null;
@@ -99,21 +110,25 @@ public class BirdScript : MonoBehaviour
         {
             if (CanClickBird)
             {
-                Debug.Log("Left click stisknut!");
+            StoneAnimator.SetTrigger("RockThrown");
+            BirdAnimator.SetTrigger("Hit");
+            Debug.Log("Left click stisknut! Bird hitnut");
                 BirdStopped = true;
                 CanClickBird = false;
-                spriteRenderer.color = Color.yellow;
+                //spriteRenderer.color = Color.yellow;
             }
         }
 
     // Samotný zpěv Birda    
     IEnumerator BirdSings()
     {
+        BirdAnimator.SetTrigger("Sing");
+        _KoalaAnimation.SetTrigger("Frightens");
         Debug.Log("BirdIsSinging TRUE");
         CanClickBird = false;
         BirdIsSinging = true;
         BirdStopped = false;
-        spriteRenderer.color = Color.red;
+        //spriteRenderer.color = Color.red;
         Debug.Log("BIRD SINGS START");
         float timer = 0;
         
@@ -136,7 +151,7 @@ public class BirdScript : MonoBehaviour
         {
             logic.ScoreDecrease(5);
         }
-        spriteRenderer.color = Color.yellow;
+        //spriteRenderer.color = Color.yellow;
         Debug.Log("KONEC BIRD SINGS");
         CanClickBird = false;   
         BirdIsSinging = false;
