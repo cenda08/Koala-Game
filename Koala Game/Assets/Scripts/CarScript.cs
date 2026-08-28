@@ -23,8 +23,10 @@ public class CarScript : MonoBehaviour
     public bool Started = false;
     public int Random;
     public bool CarIsStealingKoala = false;
+    public Transform CarPosition;
     [SerializeField] public Animator _KoalaAnimation;
     [SerializeField] public Animator CarAnimator;
+    [SerializeField] public Animator GunAnimator;
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
@@ -88,6 +90,7 @@ public class CarScript : MonoBehaviour
                     {
                        
                         CanLoadGun = true;
+                        GunAnimator.SetTrigger("TakeGunOut");
                         Debug.Log("Kliknuto na gun, da se nabit, CanLoadGun:" + CanLoadGun) ;
                     }
 
@@ -95,8 +98,9 @@ public class CarScript : MonoBehaviour
 
                     if (Input.GetKeyDown(KeyCode.R))
             {
-                        Debug.Log("GUN LOADED:" + CanClickCar); 
-                CanClickCar = true;
+                        Debug.Log("GUN LOADED:" + CanClickCar);
+                        GunAnimator.SetTrigger("Reload");
+                        CanClickCar = true;
             }
             //Druhá část, gun se musí nabít tím že se klikne na R 
            
@@ -117,6 +121,7 @@ public class CarScript : MonoBehaviour
         CarIsStealingKoala = true;
         yield return new WaitForSeconds(5f);
         //zahrání animace CarSteals
+        CarAnimator.SetBool("StealingKoala", true);
         _KoalaAnimation.SetTrigger("Frightens");
         logic.GameOver();
 
@@ -125,11 +130,13 @@ public class CarScript : MonoBehaviour
     {
         if (CanLoadGun && CanClickCar)
         {
+                StartCoroutine(CarExplodes());
             Debug.Log("Auto sejmuto");
-                //zahrání animace explosion
-            CarStopped = true;
+            
+                CarStopped = true;
             CanLoadGun = false;
             CanClickCar = false;
+
             logic.eventCycle.RemoveAt(0);
             logic.eventCooldowns.RemoveAt(0);
             logic.eventCooldowns.RemoveAt(0);
@@ -141,5 +148,20 @@ public class CarScript : MonoBehaviour
             }
     }
         //ukončení auta když se hitne gun a loadne se a namíří se na auto
+    }
+
+    IEnumerator CarExplodes()
+    {
+if (CarPosition.position.x <= -3.5)
+        {
+           GunAnimator.SetTrigger("ShootUp");
+        }
+else
+        {
+            GunAnimator.SetTrigger("ShootDown");
+        }
+
+        CarAnimator.SetTrigger("CarExplodes");
+        yield return null;
     }
 }
