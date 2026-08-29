@@ -31,7 +31,7 @@ public class CarScript : MonoBehaviour
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
-        Random = UnityEngine.Random.Range(0,1);
+        Random = UnityEngine.Random.Range(0,2);
     }
 
 
@@ -50,11 +50,18 @@ public class CarScript : MonoBehaviour
                     StartCoroutine(CarSequence());
                     Started = true;
                 }
-        }     
+        }
+
+
         
 
-        //if když se Car pohybuje a udělá se prvně scroll button a pak namíření na Car (1 + 1 OnMouseDown jak v BirdScript) tak se skončí coroutine, ale odečte se 15 sleep score 
 
+        if (Input.GetKeyDown(KeyCode.R) && CanLoadGun)
+        {
+            Debug.Log("GUN LOADED:" + CanClickCar);
+            GunAnimator.SetTrigger("Reload");
+            CanClickCar = true;
+        }
     }
 
     IEnumerator CarSequence()
@@ -72,7 +79,7 @@ public class CarScript : MonoBehaviour
         {
             transform.Translate(Vector3.down * CarSpeed * Time.deltaTime);
             transform.Translate(Vector3.right * CarSpeed * Time.deltaTime);
-            transform.localScale += Vector3.one * 0.01f * Time.deltaTime;
+            transform.localScale += Vector3.one * 0.1f * Time.deltaTime;
             // Debug.Log("pohyb auta diagonálně");
             yield return null;
 
@@ -97,26 +104,19 @@ public class CarScript : MonoBehaviour
                     }
 
                     //První část zrušení auta, musí se kliknout na zbraň co je dole v invu (Gun obrázek) lowkey to moc nechápu trochu sem to zkopčila pak to musím ještě pochopit víc, raycasting
-
-                    if (Input.GetKeyDown(KeyCode.R))
-            {
-                        Debug.Log("GUN LOADED:" + CanClickCar);
-                        GunAnimator.SetTrigger("Reload");
-                        CanClickCar = true;
             }
-            //Druhá část, gun se musí nabít tím že se klikne na R 
-           
-        }
 
         
-    }
         }
+    }
+        CanLoadGun = false;
+        CanClickCar = false;
 
         while (transform.position.y <= TargetUp && CarStopped == false)
         {
             transform.Translate(Vector3.up * CarSpeed * Time.deltaTime);
             transform.Translate(Vector3.left * CarSpeed * Time.deltaTime);
-            transform.localScale -= Vector3.one * 0.01f * Time.deltaTime; 
+            transform.localScale -= Vector3.one * 0.1f * Time.deltaTime; 
             yield return null;
         }
 
@@ -128,30 +128,9 @@ public class CarScript : MonoBehaviour
         logic.GameOver();
 
 
-        void OnMouseDown()
-    {
-        if (CanLoadGun && CanClickCar)
-        {
-                StartCoroutine(CarExplodes());
-            Debug.Log("Auto sejmuto");
-            
-                CarStopped = true;
-            CanLoadGun = false;
-            CanClickCar = false;
-
-            logic.eventCycle.RemoveAt(0);
-            logic.eventCooldowns.RemoveAt(0);
-            logic.eventCooldowns.RemoveAt(0);
-            Random = UnityEngine.Random.Range(0,1);
-            logic.CurrentPhase++;
-            logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
-            Started = false;
-             
-            }
-    }
+       
         //ukončení auta když se hitne gun a loadne se a namíří se na auto
     }
-
     IEnumerator CarExplodes()
     {
 if (CarPosition.position.x <= -3.5)
@@ -168,5 +147,28 @@ else
 
         GunAnimator.SetTrigger("PutGunDown");
         yield return null;
+    }
+
+
+    void OnMouseDown()
+    {
+        if (CanLoadGun && CanClickCar)
+        {
+            StartCoroutine(CarExplodes());
+            Debug.Log("Auto sejmuto");
+
+            CarStopped = true;
+            CanLoadGun = false;
+            CanClickCar = false;
+
+            logic.eventCycle.RemoveAt(0);
+            logic.eventCooldowns.RemoveAt(0);
+            logic.eventCooldowns.RemoveAt(0);
+            Random = UnityEngine.Random.Range(0, 1);
+            logic.CurrentPhase++;
+            logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
+            Started = false;
+
+        }
     }
 }

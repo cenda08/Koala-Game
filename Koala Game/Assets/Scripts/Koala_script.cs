@@ -16,7 +16,7 @@ public class Koala_script : MonoBehaviour
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         bird = GameObject.FindGameObjectWithTag("Bird").GetComponent<BirdScript>();
         phone = GameObject.FindGameObjectWithTag("Phone").GetComponent<PhoneScript>();
-        car = GameObject.FindGameObjectWithTag("Car").GetComponent<CarScript>();
+ 
     }
     // Update is called once per frame
     void Update()

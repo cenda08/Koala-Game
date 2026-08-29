@@ -63,7 +63,7 @@ public class BirdScript : MonoBehaviour
     {
         transform.localScale = new Vector3(1f, 1f, 1f);
         BirdAnimator.SetBool("IsLeaving", false);
-        BirdAnimator.SetBool("IsComing", true);
+        BirdAnimator.SetBool("IsLeaving", false);
         while (transform.position.x <= TargetRight)
         {
             transform.Translate(Vector3.right * BirdSpeed * Time.deltaTime);
@@ -78,7 +78,8 @@ public class BirdScript : MonoBehaviour
     // Začátek/Konec zpěvu Birda
     IEnumerator BirdSingsSequence()
     {
-    
+        BirdAnimator.SetBool("IsLeaving", false);
+        BirdAnimator.SetBool("IsComing", false);
         BirdIsSinging = true;
         for (int i = 0; i<3; i++)
         {
