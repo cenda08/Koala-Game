@@ -1,6 +1,5 @@
   using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 
 public class CarScript : MonoBehaviour
 
@@ -14,6 +13,7 @@ public class CarScript : MonoBehaviour
 
     public GameObject Car;
     public float CarSpeed;
+    public float CarSpeed2;
     public float TargetDown;
     public float TargetUp;
     public LogicScript logic;
@@ -22,6 +22,7 @@ public class CarScript : MonoBehaviour
     private bool CarStopped = true;
     public bool Started = false;
     public int Random;
+    public bool CarIsGoingDown = false;
     public bool CarIsStealingKoala = false;
     public Transform CarPosition;
     [SerializeField] public Animator _KoalaAnimation;
@@ -43,7 +44,11 @@ public class CarScript : MonoBehaviour
             StartCoroutine(CarSequence());
             Started = true;
         }
-        if(logic.eventCycle.Count > 1 && !Started && logic.eventCycle[0] != "Snake" && logic.eventCycle[1] == "Phone")
+
+
+        if(logic.eventCycle.Count > 1 && !Started 
+            && logic.eventCycle[0] != "Snake"
+            && logic.eventCycle[1] == "Phone")
         {
             if(Random == 1)
                 {
@@ -52,10 +57,30 @@ public class CarScript : MonoBehaviour
                 }
         }
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            //Vytvoření paprsku z pozice myši přes kameru do hry
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
 
-        
+            if (hit.collider != null)
+            {
+                if (hit.collider.CompareTag("Gun") && CarIsGoingDown)
+                {
+                    Gun.SetActive(true);
+                    CanLoadGun = true;
+                    GunAnimator.SetTrigger("TakeGunOut");
+
+                    Debug.Log("Kliknuto na gun, da se nabit, CanLoadGun:" + CanLoadGun);
+                }
+
+                //První část zrušení auta, musí se kliknout na zbraň co je dole v invu (Gun obrázek) lowkey to moc nechápu trochu sem to zkopčila pak to musím ještě pochopit víc, raycasting
+            }
 
 
+
+          
+        }
         if (Input.GetKeyDown(KeyCode.R) && CanLoadGun)
         {
             Debug.Log("GUN LOADED:" + CanClickCar);
@@ -71,60 +96,51 @@ public class CarScript : MonoBehaviour
         StartCoroutine(CarMovement());
     }
 
+    
+
     IEnumerator CarMovement()
     {
+            CarIsGoingDown = true;
         CarStopped = false;
         Car.SetActive(true);
-        while (transform.position.y >= TargetDown && CarStopped == false)
+        while (Car.transform.position.y >= TargetDown && CarStopped == false)
         {
-            transform.Translate(Vector3.down * CarSpeed * Time.deltaTime);
-            transform.Translate(Vector3.right * CarSpeed * Time.deltaTime);
-            transform.localScale += Vector3.one * 0.1f * Time.deltaTime;
-            // Debug.Log("pohyb auta diagonálně");
-            yield return null;
-
-        
-
-            if (Input.GetMouseButtonDown(0))
-            {
-          //Vytvoření paprsku z pozice myši přes kameru do hry
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit))
-                {
-
-                    if (hit.collider.CompareTag("Gun")) 
-                    {
-                        Gun.SetActive(true);
-                        CanLoadGun = true;
-                        GunAnimator.SetTrigger("TakeGunOut");
-                       
-                        Debug.Log("Kliknuto na gun, da se nabit, CanLoadGun:" + CanLoadGun) ;
-                    }
-
-                    //První část zrušení auta, musí se kliknout na zbraň co je dole v invu (Gun obrázek) lowkey to moc nechápu trochu sem to zkopčila pak to musím ještě pochopit víc, raycasting
-            }
-
-        
+            Car.transform.Translate(Vector3.down * CarSpeed * Time.deltaTime);
+            Car.transform.Translate(Vector3.right * CarSpeed * Time.deltaTime);
+            Car.transform.localScale += Vector3.one * 0.1f * Time.deltaTime;
+                // Debug.Log("pohyb auta diagonálně");
+                yield return null;
         }
-    }
+   
+        //auto se sestřelí => skončí sekvence
+        if (CarStopped)
+        {
+            yield break;
+        }
+
+        //po tom co dojede dolů už nejde sestřelit
         CanLoadGun = false;
         CanClickCar = false;
+        CarIsGoingDown = false;
 
-        while (transform.position.y <= TargetUp && CarStopped == false)
+        //jede back nahoru
+        Debug.Log ("Auto jede zpatky nahoru");
+        while (Car.transform.position.y <= TargetUp && CarStopped == false)
         {
-            transform.Translate(Vector3.up * CarSpeed * Time.deltaTime);
-            transform.Translate(Vector3.left * CarSpeed * Time.deltaTime);
-            transform.localScale -= Vector3.one * 0.1f * Time.deltaTime; 
+            Car.transform.Translate(Vector3.up * CarSpeed2 * Time.deltaTime);
+            Car.transform.Translate(Vector3.left * CarSpeed2 * Time.deltaTime);
+            Car.transform.localScale -= Vector3.one * 0.1f * Time.deltaTime; 
             yield return null;
         }
 
+
+        //dojede doprostřed
         CarIsStealingKoala = true;
-        yield return new WaitForSeconds(5f);
         //zahrání animace CarSteals
         CarAnimator.SetBool("StealingKoala", true);
         _KoalaAnimation.SetTrigger("Frightens");
+
+        yield return new WaitForSeconds(5f);
         logic.GameOver();
 
 
@@ -148,27 +164,47 @@ else
         GunAnimator.SetTrigger("PutGunDown");
         yield return null;
     }
+    
 
 
-    void OnMouseDown()
+
+
+
+    public void TakeGun()
     {
-        if (CanLoadGun && CanClickCar)
-        {
-            StartCoroutine(CarExplodes());
-            Debug.Log("Auto sejmuto");
+        if (CarIsGoingDown == false)
+            return;
 
-            CarStopped = true;
-            CanLoadGun = false;
-            CanClickCar = false;
+        Gun.SetActive(true);
+        CanLoadGun = true;
+        GunAnimator.SetTrigger("TakeGunOut");
 
-            logic.eventCycle.RemoveAt(0);
-            logic.eventCooldowns.RemoveAt(0);
-            logic.eventCooldowns.RemoveAt(0);
-            Random = UnityEngine.Random.Range(0, 1);
-            logic.CurrentPhase++;
-            logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
-            Started = false;
-
-        }
+        Debug.Log("GUN TAKEN OUT");
     }
+
+    public void ShootCar()
+    {
+    
+            if (CanLoadGun && CanClickCar)
+            {
+                StartCoroutine(CarExplodes());
+                Debug.Log("Auto sejmuto");
+
+                CarStopped = true;
+                CarIsGoingDown = false;
+
+                CanLoadGun = false;
+                CanClickCar = false;
+
+                logic.eventCycle.RemoveAt(0);
+                logic.eventCooldowns.RemoveAt(0);
+                // logic.eventCooldowns.RemoveAt(0);
+                Random = UnityEngine.Random.Range(0, 2);
+                logic.CurrentPhase++;
+                logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
+                Started = false;
+
+            }
+        }
+  
 }
