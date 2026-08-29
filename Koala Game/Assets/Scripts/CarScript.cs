@@ -27,6 +27,7 @@ public class CarScript : MonoBehaviour
     [SerializeField] public Animator _KoalaAnimation;
     [SerializeField] public Animator CarAnimator;
     [SerializeField] public Animator GunAnimator;
+    public GameObject Gun;
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
@@ -88,9 +89,10 @@ public class CarScript : MonoBehaviour
 
                     if (hit.collider.CompareTag("Gun")) 
                     {
-                       
+                        Gun.SetActive(true);
                         CanLoadGun = true;
                         GunAnimator.SetTrigger("TakeGunOut");
+                       
                         Debug.Log("Kliknuto na gun, da se nabit, CanLoadGun:" + CanLoadGun) ;
                     }
 
@@ -162,6 +164,9 @@ else
         }
 
         CarAnimator.SetTrigger("CarExplodes");
+
+
+        GunAnimator.SetTrigger("PutGunDown");
         yield return null;
     }
 }
