@@ -16,6 +16,8 @@ public class CarScript : MonoBehaviour
     public float CarSpeed2;
     public float TargetDown;
     public float TargetUp;
+    private Vector3 StartPosition = new Vector3(6.56f, -0.85f, -0.95f);
+    private Vector3 StartScale = new Vector3(0.4f, 0.4f, 0.2f);
     public LogicScript logic;
     private bool CanLoadGun = false;
     private bool CanClickCar = false;
@@ -33,6 +35,8 @@ public class CarScript : MonoBehaviour
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
         Random = UnityEngine.Random.Range(0,2);
+        Car.transform.position = StartPosition;
+        Car.transform.localScale = StartScale;
     }
 
 
@@ -57,30 +61,7 @@ public class CarScript : MonoBehaviour
                 }
         }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            //Vytvoření paprsku z pozice myši přes kameru do hry
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
-
-            if (hit.collider != null)
-            {
-                if (hit.collider.CompareTag("Gun") && CarIsGoingDown)
-                {
-                    Gun.SetActive(true);
-                    CanLoadGun = true;
-                    GunAnimator.SetTrigger("TakeGunOut");
-
-                    Debug.Log("Kliknuto na gun, da se nabit, CanLoadGun:" + CanLoadGun);
-                }
-
-                //První část zrušení auta, musí se kliknout na zbraň co je dole v invu (Gun obrázek) lowkey to moc nechápu trochu sem to zkopčila pak to musím ještě pochopit víc, raycasting
-            }
-
-
-
-          
-        }
+    
         if (Input.GetKeyDown(KeyCode.R) && CanLoadGun)
         {
             Debug.Log("GUN LOADED:" + CanClickCar);
@@ -100,7 +81,9 @@ public class CarScript : MonoBehaviour
 
     IEnumerator CarMovement()
     {
-            CarIsGoingDown = true;
+        Car.transform.position = StartPosition ;
+        Car.transform.localScale = StartScale;
+        CarIsGoingDown = true;
         CarStopped = false;
         Car.SetActive(true);
         while (Car.transform.position.y >= TargetDown && CarStopped == false)
@@ -149,7 +132,7 @@ public class CarScript : MonoBehaviour
     }
     IEnumerator CarExplodes()
     {
-if (CarPosition.position.x <= -3.5)
+if (CarPosition.position.y <= -3.5)
         {
            GunAnimator.SetTrigger("ShootUp");
         }
@@ -161,8 +144,15 @@ else
         CarAnimator.SetTrigger("CarExplodes");
 
 
+
+        CarStopped = true;
+        yield return new WaitForSeconds(1f);
         GunAnimator.SetTrigger("PutGunDown");
-        yield return null;
+   
+        Car.SetActive(false);
+        yield return new WaitForSeconds(2f);
+        Gun.SetActive(false);
+        Started = false;
     }
     
 
@@ -179,7 +169,7 @@ else
         CanLoadGun = true;
         GunAnimator.SetTrigger("TakeGunOut");
 
-        Debug.Log("GUN TAKEN OUT");
+        Debug.Log("GUN TAKEN OUT, dá se nabít");
     }
 
     public void ShootCar()
@@ -187,11 +177,11 @@ else
     
             if (CanLoadGun && CanClickCar)
             {
-                StartCoroutine(CarExplodes());
+            CarStopped = true;
+            CarIsGoingDown = false;
+            StartCoroutine(CarExplodes());
+           
                 Debug.Log("Auto sejmuto");
-
-                CarStopped = true;
-                CarIsGoingDown = false;
 
                 CanLoadGun = false;
                 CanClickCar = false;
@@ -202,7 +192,7 @@ else
                 Random = UnityEngine.Random.Range(0, 2);
                 logic.CurrentPhase++;
                 logic.TimerText.text = logic.CurrentPhase.ToString() + " / " + logic.TotalEvents;
-                Started = false;
+              
 
             }
         }
