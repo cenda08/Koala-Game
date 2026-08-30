@@ -17,7 +17,7 @@ public class CarScript : MonoBehaviour
     public float TargetDown;
     public float TargetUp;
     private Vector3 StartPosition = new Vector3(6.56f, -0.85f, -0.95f);
-    private Vector3 StartScale = new Vector3(0.4f, 0.4f, 0.2f);
+    private Vector3 StartScale = new Vector3(0.2f, 0.2f, 0.2f);
     public LogicScript logic;
     private bool CanLoadGun = false;
     private bool CanClickCar = false;
@@ -31,6 +31,7 @@ public class CarScript : MonoBehaviour
     [SerializeField] public Animator CarAnimator;
     [SerializeField] public Animator GunAnimator;
     public GameObject Gun;
+    public Koala_script koala;
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<LogicScript>();
@@ -90,7 +91,8 @@ public class CarScript : MonoBehaviour
         {
             Car.transform.Translate(Vector3.down * CarSpeed * Time.deltaTime);
             Car.transform.Translate(Vector3.right * CarSpeed * Time.deltaTime);
-            Car.transform.localScale += Vector3.one * 0.1f * Time.deltaTime;
+            Car.transform.Translate(Vector3.right * CarSpeed * Time.deltaTime);
+            Car.transform.localScale += Vector3.one * 0.05f * Time.deltaTime;
                 // Debug.Log("pohyb auta diagonálně");
                 yield return null;
         }
@@ -112,7 +114,8 @@ public class CarScript : MonoBehaviour
         {
             Car.transform.Translate(Vector3.up * CarSpeed2 * Time.deltaTime);
             Car.transform.Translate(Vector3.left * CarSpeed2 * Time.deltaTime);
-            Car.transform.localScale -= Vector3.one * 0.1f * Time.deltaTime; 
+            Car.transform.Translate(Vector3.left * CarSpeed2 * Time.deltaTime);
+            Car.transform.localScale -= Vector3.one * 0.05f * Time.deltaTime; 
             yield return null;
         }
 
@@ -122,7 +125,7 @@ public class CarScript : MonoBehaviour
         //zahrání animace CarSteals
         CarAnimator.SetBool("StealingKoala", true);
         _KoalaAnimation.SetTrigger("Frightens");
-
+        StartCoroutine(koala.KoalaGetsStolen());
         yield return new WaitForSeconds(5f);
         logic.GameOver();
 
@@ -140,7 +143,7 @@ else
         {
             GunAnimator.SetTrigger("ShootDown");
         }
-
+  
         CarAnimator.SetTrigger("CarExplodes");
 
 
