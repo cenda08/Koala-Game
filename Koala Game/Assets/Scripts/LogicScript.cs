@@ -15,11 +15,14 @@ public class LogicScript : MonoBehaviour
     public Text TimerText;
     public Text FinalSleepScoreText;
     public GameObject GameOverScreen;
+    public GameObject GunIcon;
     public GameObject Hint;
     public GameObject HintScreen;
     public GameObject Star1;
     public GameObject Star2;
     public GameObject Star3;
+    public CarScript car;
+    public BirdScript bird;
     public List<string> eventCycle = new List<string>();
     public List<float> eventCooldowns = new List<float>();
     public int TotalEvents = 10; // Celkový počet eventů
@@ -44,7 +47,25 @@ public class LogicScript : MonoBehaviour
     }
 
     void Start()
-    {string difficulty = ButtonController.ChosenDifficulty; 
+    {
+        
+        string difficulty = ButtonController.ChosenDifficulty;
+        if (difficulty == "Easy")
+        {
+            TotalEvents = 10;
+            car.CarSpeed = 0.45f;
+            bird.BirdSpeed = 1f;
+            Hint.SetActive(true);
+        }
+        else if (difficulty == "Hard")
+        {
+            TotalEvents = 15;
+            car.CarSpeed = 0.8f;
+            bird.BirdSpeed = 1.5f;
+            Hint.SetActive(false);
+        }
+
+
         RandomizeEvents();
         TimerText.text = CurrentPhase.ToString() + " / " + TotalEvents;
     }
@@ -87,6 +108,7 @@ public class LogicScript : MonoBehaviour
     { 
         GameOverScreen.SetActive(true);
         Hint.SetActive(false);
+        GunIcon.SetActive(false);
         FinalSleepScoreText.text = SleepScore.ToString();
         SleepScoreText.gameObject.SetActive(false);
         HintScreen.SetActive(false);
@@ -106,7 +128,7 @@ public class LogicScript : MonoBehaviour
             Star1.SetActive(true);
         }
 
-        else if (25 < SleepScore && SleepScore <= 74)
+        else if (35 < SleepScore && SleepScore <= 74)
         {
             Star1.SetActive(true);
             Star2.SetActive(true);

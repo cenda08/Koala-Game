@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 152aba48d752e3a4381908319cbcc52b
+guid: 6941d709b367da4408f90eeabd170dc0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4057440457286888092
-    second: Sleepscore_0
+      213: 6905152985434914441
+    second: Sleepscore 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Sleepscore_0
+      name: Sleepscore 1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 100
         y: 0
-        width: 23
-        height: 24
+        width: 22
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 465dd1eb66311b7c0800000000000000
-      internalID: -4057440457286888092
+      spriteID: 98e73902e0804df50800000000000000
+      internalID: 6905152985434914441
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 162b4581c9868734cb692d2ab5a4602c
+    spriteID: ac631a837b3e6324ba1555a2b8a87b74
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Sleepscore_0: -4057440457286888092
+      Sleepscore 1_0: 6905152985434914441
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

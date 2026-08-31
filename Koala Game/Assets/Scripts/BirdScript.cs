@@ -15,6 +15,7 @@ public class BirdScript : MonoBehaviour
     private bool CanClickBird = false;
     private bool BirdStopped = true;
     public float TargetLeft;
+    public float BirdPause;
     public bool BirdIsSinging = false;
     public bool Started = false;
     public int Random;

@@ -115,7 +115,7 @@ public class PhoneScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (CanClickHint)
+        if (CanClickHint && ButtonController.ChosenDifficulty == "Easy")
         {
             StartCoroutine(Hint());
         }
